@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <extension key="au.com.agileware.gfcivicrmcompanion" type="module">
   <file>gfcivicrmcompanion</file>
-  <name>au.com.agileware.gfcivicrmcompanion</name>
-  <description>FIXME</description>
+  <name>GF CiviCRM Companion</name>
+  <description>A companion extension for the GF CiviCRM WordPress plugin and remote CiviCRM installations.</description>
   <license>GPL-2.0</license>
   <authors>
     <author>
@@ -12,9 +12,9 @@
     </author>
   </authors>
   <urls>
-    <url desc="Main Extension Page">https://FIXME</url>
-    <url desc="Documentation">https://FIXME</url>
-    <url desc="Support">https://FIXME</url>
+    <url desc="Main Extension Page">https://github.com/agileware/au.com.agileware.gfcivicrmcompanion</url>
+    <url desc="Documentation">https://github.com/agileware/au.com.agileware.gfcivicrmcompanion</url>
+    <url desc="Support">https://github.com/agileware/au.com.agileware.gfcivicrmcompanion</url>
     <url desc="Licensing">https://www.gnu.org/licenses/gpl-2.0.html</url>
   </urls>
   <releaseDate>2026-02-03</releaseDate>
@@ -36,7 +36,6 @@
     <comments>Listed versions. For example, specify both "4" and "5".</comments>
     <ver>5</ver>
   </smarty_compatibility>
-  <comments>This is a new, undeveloped module</comments>
   <classloader>
     <psr0 prefix="CRM_" path="."/>
     <psr4 prefix="Civi\" path="Civi"/>

@@ -33,3 +33,92 @@ function gfcivicrmcompanion_civicrm_install(): void {
 function gfcivicrmcompanion_civicrm_enable(): void {
   _gfcivicrmcompanion_civix_civicrm_enable();
 }
+
+/**
+ * APIv3: Allow 'access AJAX API' to reach the kernel for specific actions.
+ * 
+ * Opens the door so CiviCRM does not immediately reject the call.
+ */
+function gfcivicrmcompanion_civicrm_alterAPIPermissions($entity, $action, &$params, &$permissions) {
+  if (!isset($params['_gf_sig']) || !isset($params['_gf_ts'])) {
+    return;
+  }
+  
+  $entities = [
+    'setting', 
+    'contact_checksum', 
+    'contact', 
+    'group', 
+    'option_group', 
+    'country', 
+    'saved_search', 
+    'form_processor', 
+    'form_processor_instance', 
+    'form_processor_defaults', 
+    'payment_processor', 
+    'payment_token'
+  ]; // Add entities you use
+
+  $allowed_actions = [ 'get', 'getfields', 'getcount', 'getsingle', 'validate', 'export' ];
+
+  if (in_array($entity, $entities) && in_array($action, $allowed_actions)) {
+    $customPerm = 'access AJAX API';
+
+    $existing = $permissions[$entity][$action] ?? ['administer CiviCRM'];
+
+    // Ensure $existing is an array (sometimes it's just a string)
+    $existing = (array) $existing; 
+
+    // Skip if no permissions are set for this entity and action
+    if ( !$existing ) {
+      return;
+    }
+
+    // Add the permission to the required list
+    if (!in_array($customPerm, $existing)) {
+        $existing[] = $customPerm;
+    }
+
+    // Is an OR check
+    $permissions[$entity][$action] = [$existing];
+  }
+}
+
+/**
+ * DEVNOTE: CMRF (Wordpress Connector to CiviCRM with CiviMcRestFace) currently doesn't support apiv4.
+ * This is UNTESTED at this stage.
+ * 
+ * APIv4: Allow 'access AJAX API' to reach the kernel.
+ * 
+ * Opens the door so CiviCRM does not immediately reject the call.
+ */
+/*function gfcivicrmcompanion_civicrm_alterApiRoutePermissions(&$permissions, $entity, $action) {
+  $entities = ['Setting', 'ContactChecksum', 'Contact', 'Group', 'OptionGroup', 'Country', 'SavedSearch', 'FormProcessor', 'FormProcessorInstance', 'FormProcessorDefaults', 'PaymentProcessor', 'PaymentToken'];
+  if (in_array($entity, $entities)) {
+    $customPerm = 'access AJAX API';
+
+    $existing = $permissions[$entity][$action] ?? ['administer CiviCRM'];
+
+    // Ensure $existing is an array (sometimes it's just a string)
+    $existing = (array) $existing; 
+
+    // Add the permission to the required list
+    if (!in_array($customPerm, $existing)) {
+        $existing[] = $customPerm;
+    }
+
+    // Is an OR check
+    $permissions[$entity][$action] = [$existing];
+  }
+}*/
+
+/**
+ * Implements hook_civicrm_apiWrappers().
+ * 
+ * Responsible for validating the call comes from gf-civicrm. If not, it will reject the call.
+ */
+function gfcivicrmcompanion_civicrm_apiWrappers(&$wrappers, $apiRequest) {
+  if (!interface_exists('API_Wrapper')) return;
+
+  $wrappers[] = new CRM_Gfcivicrmcompanion_APIWrapper();
+}
