@@ -64,7 +64,7 @@ function gfcivicrmcompanion_civicrm_alterAPIPermissions($entity, $action, &$para
   ]; // Add entities used by GF CiviCRM
 
   if (in_array($entity, $entities) && in_array($action, $allowed_actions)) {
-    $existing = $permissions[$entity][$action] ?? ['administer CiviCRM'];
+    $existing = $permissions[$entity][$action] ?: ['administer CiviCRM']; // Default to 'administer CiviCRM' if missing
 
     // Ensure $existing is an array (sometimes it's just a string)
     $existing = (array) $existing; 
@@ -77,34 +77,6 @@ function gfcivicrmcompanion_civicrm_alterAPIPermissions($entity, $action, &$para
     // Is an OR check
     $permissions[$entity][$action] = [$existing];
   }
-
-  // Modify entities for an AND permission check (e.e. 'access CiviCRM' AND 'access CiviContribute' AND 'access AJAX API' )
-  /*
-  $entities = [
-    'membership',
-    'contribution',
-    'contribution_recur',
-  ];
-
-  if (in_array($entity, $entities) && in_array($action, $allowed_actions)) {
-    $existing = $permissions[$entity][$action] ?? ['administer CiviCRM'];
-
-    // Ensure $existing is an array (sometimes it's just a string)
-    $existing = (array) $existing; 
-
-    // Skip if no permissions are set for this entity and action
-    if ( !$existing ) {
-      return;
-    }
-
-    // Add the permission to the required list
-    if (!in_array($custom_permission, $existing)) {
-        $existing[] = $custom_permission;
-    }
-
-    // Is an OR check
-    $permissions[$entity][$action] = $existing;
-  }*/
 }
 
 /**
