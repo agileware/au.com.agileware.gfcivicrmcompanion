@@ -43,7 +43,11 @@ function gfcivicrmcompanion_civicrm_alterAPIPermissions($entity, $action, &$para
   if (!isset($params['_gf_sig']) || !isset($params['_gf_ts'])) {
     return;
   }
+
+  $allowed_actions = [ 'get', 'getfields', 'getcount', 'getsingle', 'validate', 'export' ];
+  $custom_permission = 'access AJAX API';
   
+  // First modify entities for an OR permission check (e.e. 'administer CiviCRM' OR 'access AJAX API')
   $entities = [
     'setting', 
     'contact_checksum', 
@@ -56,14 +60,33 @@ function gfcivicrmcompanion_civicrm_alterAPIPermissions($entity, $action, &$para
     'form_processor_instance', 
     'form_processor_defaults', 
     'payment_processor', 
-    'payment_token'
-  ]; // Add entities you use
-
-  $allowed_actions = [ 'get', 'getfields', 'getcount', 'getsingle', 'validate', 'export' ];
+    'payment_token',
+  ]; // Add entities used by GF CiviCRM
 
   if (in_array($entity, $entities) && in_array($action, $allowed_actions)) {
-    $customPerm = 'access AJAX API';
+    $existing = $permissions[$entity][$action] ?? ['administer CiviCRM'];
 
+    // Ensure $existing is an array (sometimes it's just a string)
+    $existing = (array) $existing; 
+
+    // Add the permission to the required list
+    if (!in_array($custom_permission, $existing)) {
+        $existing[] = $custom_permission;
+    }
+
+    // Is an OR check
+    $permissions[$entity][$action] = [$existing];
+  }
+
+  // Modify entities for an AND permission check (e.e. 'access CiviCRM' AND 'access CiviContribute' AND 'access AJAX API' )
+  /*
+  $entities = [
+    'membership',
+    'contribution',
+    'contribution_recur',
+  ];
+
+  if (in_array($entity, $entities) && in_array($action, $allowed_actions)) {
     $existing = $permissions[$entity][$action] ?? ['administer CiviCRM'];
 
     // Ensure $existing is an array (sometimes it's just a string)
@@ -75,13 +98,13 @@ function gfcivicrmcompanion_civicrm_alterAPIPermissions($entity, $action, &$para
     }
 
     // Add the permission to the required list
-    if (!in_array($customPerm, $existing)) {
-        $existing[] = $customPerm;
+    if (!in_array($custom_permission, $existing)) {
+        $existing[] = $custom_permission;
     }
 
     // Is an OR check
-    $permissions[$entity][$action] = [$existing];
-  }
+    $permissions[$entity][$action] = $existing;
+  }*/
 }
 
 /**
