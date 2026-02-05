@@ -20,6 +20,10 @@ This extension requires the use of a secure secret key for HMAC (Hash-based Mess
 1. Configure the Remote API User's user role to have the *'access AJAX API'* permission.
 1. Test remote connections using the pre-flight checks in Gravity Forms' CiviCRM REST Connection Profile settings.
 
+### Known Issues
+
+**Retrieval of PaymentTokens is not currently supported.** Recommend managing these on the CiviCRM site.
+
 
 # About the Authors
 
