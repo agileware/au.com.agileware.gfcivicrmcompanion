@@ -4,12 +4,6 @@ CiviCRM extension developed by Agileware as a companion for the [GF CiviCRM Word
 
 This is an [extension for CiviCRM](https://docs.civicrm.org/sysadmin/en/latest/customize/extensions/), licensed under [GPL-2.0](LICENSE.txt).
 
-## Connector to CiviCRM with CiviMcRestFace (CMRF) connection validation
-
-CMRF connection profiles will attempt to validate the connection to CiviCRM using the API user's credentials. It does this using the Entity.get API call, which requires the 'administer CiviCRM' permission.
-
-To validate the connection, give the API user the 'administer CiviCRM' permission. Then after enabling this extension, change to 'access AJAX API'.
-
 ## Usage
 
 This extension requires the use of a secure secret key for HMAC (Hash-based Message Authentication Code) Signing. This key must be added to both CiviCRM and the remote WordPress website.
@@ -23,6 +17,12 @@ This extension requires the use of a secure secret key for HMAC (Hash-based Mess
 ### Known Issues
 
 **Retrieval of PaymentTokens is not currently supported.** Recommend managing these on the CiviCRM site.
+
+#### Connector to CiviCRM with CiviMcRestFace (CMRF) connection validation
+
+CMRF connection profiles will attempt to validate the connection to CiviCRM using the API user's credentials. It does this using the Entity.get API call, which requires the 'administer CiviCRM' permission.
+
+To validate the connection, give the API user the 'administer CiviCRM' permission. Then after enabling this extension, change to 'access AJAX API'.
 
 
 # About the Authors
